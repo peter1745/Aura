@@ -1,7 +1,7 @@
 #define AURA_USE_ASSERTS
 #define AURA_USE_LARGE_STACK
-#include "Include/Stack.hpp"
-#include "Include/Unique.hpp"
+#include "Include/Aura/Stack.hpp"
+#include "Include/Aura/Unique.hpp"
 
 #include <iostream>
 #include <string>
