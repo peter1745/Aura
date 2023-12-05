@@ -1,8 +1,12 @@
-#pragma once
+module;
 
-#include "Core.hpp"
+#include <utility>
 
-namespace Aura {
+export module Aura:Unique;
+
+import :Core;
+
+export namespace Aura {
 
 	template<typename T, typename TDeleter = DefaultDeleter<T>>
 	class Unique

@@ -1,11 +1,11 @@
-#pragma once
-
-#include "Core.hpp"
+module;
 
 #include <initializer_list>
 #include <iterator>
 
-namespace Aura {
+export module Aura:Span;
+
+export namespace Aura {
 
 	template<typename T>
 	class Span
@@ -34,10 +34,16 @@ namespace Aura {
 		constexpr SizeType Count() const { return m_Count; }
 		constexpr SizeType ByteCount() const { return m_Count * sizeof(ValueType); }
 
-		constexpr ValueType& operator[](this auto&& self, SizeType index)
+		constexpr ValueType& operator[](SizeType index)
 		{
-			AuraVerify(index < self.m_Count, "Index out of range!");
-			return self.m_Ptr[index];
+			//AuraVerify(index < self.m_Count, "Index out of range!");
+			return m_Ptr[index];
+		}
+
+		constexpr const ValueType& operator[](SizeType index) const
+		{
+			//AuraVerify(index < self.m_Count, "Index out of range!");
+			return m_Ptr[index];
 		}
 
 		constexpr ValueType* Begin() { return m_Ptr; }

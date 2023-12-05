@@ -1,11 +1,11 @@
-#pragma once
+module;
 
-#include <stdint.h>
+#include <cstdint>
 #include <utility>
 
-#include "Verify.hpp"
+export module Aura:Core;
 
-namespace Aura {
+export namespace Aura {
 
 	template<typename T>
 	constexpr T AlignUp2(T value, uint64_t align)
@@ -50,9 +50,33 @@ namespace Aura {
 		return static_cast<To*>(from);
 	}
 
+	template<typename T>
+	struct HandleImpl;
+
+	template<typename T>
+	struct Handle
+	{
+		using Impl = HandleImpl<T>;
+
+		Handle() = default;
+		Handle(Impl* impl)
+			: m_Impl(impl) {}
+
+		T Unwrap() const noexcept { return T(m_Impl); }
+		operator T() const noexcept { return Unwrap(); }
+
+		operator bool() const noexcept { return m_Impl; }
+		Impl* operator->() const noexcept { return m_Impl; }
+
+	protected:
+		Impl* m_Impl = nullptr;
+	};
+
 }
 
+/*
 #define AuraConcatInternal(A, B) A##B
 #define AuraConcat(A, B) AuraConcatInternal(A, B)
 
 #define AuraScopeExit(...) ::Aura::ScopeExit AuraConcat(scopeExit, __LINE__) = [__VA_ARGS__]
+*/
