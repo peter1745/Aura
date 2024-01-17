@@ -1,15 +1,14 @@
-module;
+#pragma once
 
+#include "Core.hpp"
+#include "Span.hpp"
+
+#include <cstddef>
 #include <memory>
 
-export module Aura:Stack;
+namespace Aura {
 
-import :Core;
-import :Span;
-
-inline static constexpr size_t LargeStackSize = 4 * 1024 * 1024;
-
-export namespace Aura {
+	inline constexpr size_t LargeStackSize = 4 * 1024 * 1024;
 
 	struct ThreadStack
 	{
@@ -34,22 +33,19 @@ export namespace Aura {
 		}
 	};
 
+	template<typename T>
+	Span<T> StackAlloc(uint32_t count)
+	{
+		return LargeStack.Allocate<T>(count);
+	}
+
+	template<typename T>
+	Span<T> StackAllocAligned(uint64_t count, uint64_t align)
+	{
+		return LargeStack.AllocateAligned<T>(count, align);
+	}
+
 	inline thread_local ThreadStack LargeStack;
-
-	/*
-	#define AuraStackPoint() AuraScopeExit(head = ::Aura::LargeStack.Head) { ::Aura::LargeStack.Head = head; }
-#else
-
-#define AuraStackPoint()
-
-#endif
-*/
-
 }
 
-/*#if defined(AURA_USE_LARGE_STACK)
-	#define AuraStackAlloc(Type, Count) ::Aura::LargeStack.Allocate<Type>(Count)
-#else
-	#define AuraStackAllocImpl(Type, Count) static_cast<Type*>(AuraAlloca(sizeof(Type) * Count))
-	#define AuraStackAlloc(Type, Count) ::Aura::Span{ AuraStackAllocImpl(Type, Count), Count }
-#endif*/
+#define AuraStackPoint() AuraScopeExit(head = ::Aura::LargeStack.Head){ ::Aura::LargeStack.Head = head; }

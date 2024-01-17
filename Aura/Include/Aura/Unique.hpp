@@ -1,12 +1,10 @@
-module;
+#pragma once
+
+#include "Core.hpp"
 
 #include <utility>
 
-export module Aura:Unique;
-
-import :Core;
-
-export namespace Aura {
+namespace Aura {
 
 	template<typename T, typename TDeleter = DefaultDeleter<T>>
 	class Unique
@@ -69,6 +67,13 @@ export namespace Aura {
 
 		template<typename U>
 		operator U&() const & { return *PointerCast<U, T>(m_Instance); }
+
+	public:
+		template<typename... Args>
+		static Unique New(Args&&... args)
+		{
+			return Unique(new T(std::forward<Args>(args)...));
+		}
 
 	private:
 		T* m_Instance = nullptr;

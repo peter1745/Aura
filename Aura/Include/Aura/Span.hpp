@@ -1,11 +1,9 @@
-module;
+#pragma once
 
 #include <initializer_list>
 #include <iterator>
 
-export module Aura:Span;
-
-export namespace Aura {
+namespace Aura {
 
 	template<typename T>
 	class Span
@@ -23,7 +21,7 @@ export namespace Aura {
 		constexpr Span(ValueType* first, ValueType* last)
 		{
 			m_Ptr = first;
-			m_Count = std::distance(first, last);
+			m_Count = std::distance(first, last) + 1;
 		}
 
 		constexpr Span(std::initializer_list<ValueType> list)
