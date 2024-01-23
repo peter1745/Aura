@@ -33,6 +33,8 @@ namespace Aura {
 		}
 	};
 
+	inline thread_local ThreadStack LargeStack;
+
 	template<typename T>
 	Span<T> StackAlloc(uint32_t count)
 	{
@@ -44,8 +46,6 @@ namespace Aura {
 	{
 		return LargeStack.AllocateAligned<T>(count, align);
 	}
-
-	inline thread_local ThreadStack LargeStack;
 }
 
 #define AuraStackPoint() AuraScopeExit(head = ::Aura::LargeStack.Head){ ::Aura::LargeStack.Head = head; }

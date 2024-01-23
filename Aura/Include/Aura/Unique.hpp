@@ -47,7 +47,7 @@ namespace Aura {
 			return *this;
 		}
 
-		constexpr ~Unique() noexcept
+		constexpr ~Unique()
 		{
 			if (m_Instance)
 				TDeleter()(m_Instance);
@@ -62,11 +62,8 @@ namespace Aura {
 			return std::exchange(m_Instance, nullptr);
 		}
 
-		operator T& () const& { return *m_Instance; }
+		operator T& () const & { return *m_Instance; }
 		T* operator->() const { return m_Instance; }
-
-		template<typename U>
-		operator U&() const & { return *PointerCast<U, T>(m_Instance); }
 
 	public:
 		template<typename... Args>

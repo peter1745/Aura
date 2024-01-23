@@ -40,8 +40,27 @@ namespace Aura {
 			delete instance;
 		}
 	};
+
+	using SizeType = uint32_t;
 }
 
 #define AuraConcatInternal(A, B) A##B
 #define AuraConcat(A, B) AuraConcatInternal(A, B)
+
+#if defined(_MSC_VER)
+	#define AuraDebugBreak __debugbreak()
+	#define AuraNoUniqueAddress [[msvc::no_unique_address]]
+#else
+	#define AuraNoUniqueAddress [[no_unique_address]]
+#endif
+
+#define AuraVerify(Expr)    \
+do {                        \
+	if (!(Expr))            \
+	{                       \
+		AuraDebugBreak;     \
+	}                       \
+} while (false)
+
+
 #define AuraScopeExit(...) ::Aura::ScopeExit AuraConcat(scopeExit, __LINE__) = [__VA_ARGS__]
