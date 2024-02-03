@@ -17,17 +17,22 @@ namespace Aura {
 		std::byte* End = Memory.get() + LargeStackSize;
 
 		template<typename T>
-		Span<T> AllocateAligned(uint64_t count, uint64_t align)
+		Span<T> AllocateAligned(uint32_t count, uint32_t align)
 		{
-			uint64_t size = count * sizeof(T);
-			//AuraVerify(std::distance(Head + size, End) > 0, "Stack overflow!");
+			if (count == 0)
+			{
+				return Span<T>{nullptr, 0u};
+			}
+
+			uint32_t size = count * sizeof(T);
 			std::byte* ptr = Head;
 			Head = AlignUp2(Head + size, align);
+			memset(ptr, 0, size);
 			return Span<T>{ reinterpret_cast<T*>(ptr), count };
 		}
 
 		template<typename T>
-		Span<T> Allocate(uint64_t count)
+		Span<T> Allocate(uint32_t count)
 		{
 			return AllocateAligned<T>(count, 16);
 		}
@@ -42,7 +47,7 @@ namespace Aura {
 	}
 
 	template<typename T>
-	Span<T> StackAllocAligned(uint64_t count, uint64_t align)
+	Span<T> StackAllocAligned(uint32_t count, uint32_t align)
 	{
 		return LargeStack.AllocateAligned<T>(count, align);
 	}
