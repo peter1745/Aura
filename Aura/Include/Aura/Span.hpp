@@ -10,7 +10,7 @@ namespace Aura {
 	{
 	public:
 		using ValueType = T;
-		using SizeType = uint64_t;
+		using SizeType = uint32_t;
 
 	public:
 		constexpr Span() = default;
@@ -49,6 +49,11 @@ namespace Aura {
 
 		constexpr ValueType* End() { return m_Ptr + m_Count; }
 		constexpr const ValueType* End() const { return m_Ptr + m_Count; }
+
+		constexpr ValueType* Data() { return m_Ptr; }
+		constexpr const ValueType* Data() const { return m_Ptr; }
+
+		constexpr bool IsEmpty() const { return m_Count == 0; }
 
 	private:
 		ValueType* m_Ptr = nullptr;
